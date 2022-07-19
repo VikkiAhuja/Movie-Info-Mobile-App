@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 // ** Components
 import BoldText from '../components/BoldText'
@@ -9,9 +10,14 @@ import theme from '../theme'
 
 const HomeScreen = props => {
     return (
-        <View style={styles.root}>
-            <BoldText>{"Home Screen"}</BoldText>
-        </View>
+        <SafeAreaView style={styles.root}>
+            <View style={{ padding: 20 }}>
+                <BoldText style={{ fontSize: 18 }}>Hello, </BoldText>
+                <View>
+                    
+                </View>
+            </View>
+        </SafeAreaView>
     )
 }
 
