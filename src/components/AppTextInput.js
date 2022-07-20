@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState }
 import { TextInput } from 'react-native'
 
 const AppTextInput = forwardRef((props, ref) => {
-    const { defaultValue } = props
+    const { defaultValue, onChangeText } = props
 
     // ** Refs
     const selfRef = useRef(null)
@@ -12,7 +12,10 @@ const AppTextInput = forwardRef((props, ref) => {
 
     const onChangeTextHandler = useCallback((enteredText) => {
         setValue(enteredText)
-    }, [])
+        if (onChangeText && typeof onChangeText === "function") {
+            onChangeText(enteredText)
+        }
+    }, [onChangeText])
 
     const initHandler = useCallback(() => ({
         getValue: () => value?.trim() ?? value,

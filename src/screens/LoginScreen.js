@@ -1,6 +1,5 @@
 import React, { useCallback, useRef } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 
 import RoundedButton from '../components/RoundedButton'
 import AppTextInput from '../components/AppTextInput'
@@ -10,6 +9,7 @@ import BoldText from '../components/BoldText'
 import { showToast } from '../utils/ToastUtils'
 import RegularText from '../components/RegularText'
 import AuthFooter from '../components/AuthFooter'
+import Root from '../components/Root'
 
 const LoginScreen = (props) => {
     const { navigation } = props
@@ -61,7 +61,7 @@ const LoginScreen = (props) => {
     }, [navigation])
 
     return (
-        <SafeAreaView style={styles.root}>
+        <Root style={styles.root}>
             <View style={{ flex: 0.5, alignItems: 'center', justifyContent: 'center' }}>
                 <BoldText style={{ fontSize: 24 }}>{"Login"}</BoldText>
             </View>
@@ -95,7 +95,7 @@ const LoginScreen = (props) => {
                 actionText='Create New'
                 onAction={createAccountHandler}
             />
-        </SafeAreaView>
+        </Root>
     )
 }
 

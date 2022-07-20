@@ -8,13 +8,15 @@
 
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { RootSiblingParent } from 'react-native-root-siblings';
 import MainNavigation from './src/navigation/MainNavigation';
-
 const App = props => {
   return (
-    <SafeAreaProvider>
-      <MainNavigation />
-    </SafeAreaProvider>
+    <RootSiblingParent>
+      <SafeAreaProvider>
+        <MainNavigation />
+      </SafeAreaProvider>
+    </RootSiblingParent>
   )
 }
 
