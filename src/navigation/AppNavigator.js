@@ -8,7 +8,11 @@ const Stack = createNativeStackNavigator()
 
 const AppNavigator = props => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
             <Stack.Screen
                 name="home"
                 component={HomeScreen}
@@ -16,6 +20,10 @@ const AppNavigator = props => {
             <Stack.Screen
                 name="details"
                 component={DetailsScreen}
+                options={{
+                    headerShown: true,
+                    title: "Details"
+                }}
             />
             <Stack.Screen
                 name="profile"

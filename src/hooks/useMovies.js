@@ -61,6 +61,22 @@ const useMovies = () => {
         }
     }, [])
 
+    const getMovieDetails = useCallback(async (movieId) => {
+        try {
+            setLoading(true)
+            const movieDetailsRes = await axios({
+                url: `https://api.themoviedb.org/3/movie/${movieId}`,
+                method: "GET"
+            })
+            setLoading(false)
+            return movieDetailsRes.data
+        } catch (err) {
+            setLoading(false)
+            console.log('[getMovieDetails] Error : ', err.message)
+            return null
+        }
+    }, [])
+
     const initHandler = useCallback(async () => {
         try {
             setLoading(true)
@@ -86,6 +102,8 @@ const useMovies = () => {
         getPopularMovies,
         getAllMovies,
         searchMovies,
+        getMovieDetails,
+        setSearchResults
     }
 }
 

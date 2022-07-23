@@ -9,14 +9,24 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { RootSiblingParent } from 'react-native-root-siblings';
+
 import MainNavigation from './src/navigation/MainNavigation';
-const App = props => {
+
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor, store } from './src/store';
+import { Provider } from 'react-redux'
+
+const App = () => {
   return (
-    <RootSiblingParent>
-      <SafeAreaProvider>
-        <MainNavigation />
-      </SafeAreaProvider>
-    </RootSiblingParent>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <RootSiblingParent>
+          <SafeAreaProvider>
+            <MainNavigation />
+          </SafeAreaProvider>
+        </RootSiblingParent>
+      </PersistGate>
+    </Provider>
   )
 }
 

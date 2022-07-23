@@ -1,5 +1,5 @@
-import { customLog } from "./MiscUtils"
+import Toast from "react-native-root-toast"
 
 export const showToast = (message) => {
-    customLog('toast : ', message)
+    Toast.show(message)
 }

@@ -1,18 +1,21 @@
 import React, { useCallback, useRef } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import RoundedButton from '../components/RoundedButton'
 import AppTextInput from '../components/AppTextInput'
-
-import theme from '../theme'
-import BoldText from '../components/BoldText'
-import { showToast } from '../utils/ToastUtils'
-import RegularText from '../components/RegularText'
 import AuthFooter from '../components/AuthFooter'
+import BoldText from '../components/BoldText'
 import Root from '../components/Root'
+
+import { showToast } from '../utils/ToastUtils'
+import theme from '../theme'
+import { useDispatch } from 'react-redux'
+import { login } from '../store/userSlice'
 
 const LoginScreen = (props) => {
     const { navigation } = props
+
+    const dispatch = useDispatch()
 
     // ** Refs
     const userNameRef = useRef(null)
@@ -35,15 +38,17 @@ const LoginScreen = (props) => {
                 showToast("Username should contain atleast 5 characters/digits.")
                 return
             }
-            if (!password.length < 6) {
+            if (password.length < 6) {
                 showToast("Password should contain atleast 6 characters/digits.")
                 return
             }
+
+            dispatch(login({userName, password}))
     
         } catch (err) {
             showToast('Error : ', err.message)
         }
-    }, [])
+    }, [dispatch])
 
     const submitEditingHandler = useCallback((sender) => {
         switch (sender) {

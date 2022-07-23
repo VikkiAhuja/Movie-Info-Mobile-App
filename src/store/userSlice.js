@@ -1,23 +1,42 @@
-import { createSlice, configureStore } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { showToast } from '../utils/ToastUtils'
 
 const userSlice = createSlice({
   name: 'user',
   initialState: {
-    userData: null
+    userData: null,
+    users: []
   },
   reducers: {
-    login: state => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
+    login: (state, { payload }) => {
+      const { userName, password } = payload
+      const userIndex = state.users.findIndex(user => user.userName?.toLowerCase() === userName.toLowerCase() && user.password?.toLowerCase() === password.toLowerCase())
+      if (userIndex > -1) {
+        state.userData = state.users[userIndex]
+        showToast("Logged in successfully.")
+      } else {
+        state.userData = null
+        showToast("Account not found, ")
+      }
     },
-    signup: state => {
-      state.value -= 1
+    signup: (state, { payload }) => {
+      const newUser = {
+        id: state.users.length,
+        ...payload,
+      }
+      state.userData = newUser
+      state.users = [
+        ...state.users,
+        newUser
+      ]
+      showToast("Account created successfully.")
+    },
+    logout: (state) => {
+      state.userData = null
+      showToast("Logged out successfully.")
     }
   }
 })
 
-export const { login, signup } = userSlice.actions
+export const { login, signup, logout } = userSlice.actions
 export default userSlice.reducer

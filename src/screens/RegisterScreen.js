@@ -1,18 +1,22 @@
 import React, { useCallback, useRef } from 'react'
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 
 import RoundedButton from '../components/RoundedButton'
 import AppTextInput from '../components/AppTextInput'
 
-import theme from '../theme'
-import BoldText from '../components/BoldText'
-import { showToast } from '../utils/ToastUtils'
-import RegularText from '../components/RegularText'
 import AuthFooter from '../components/AuthFooter'
+import BoldText from '../components/BoldText'
 import Root from '../components/Root'
+
+import { showToast } from '../utils/ToastUtils'
+import theme from '../theme'
+import { useDispatch } from 'react-redux'
+import { signup } from '../store/userSlice'
 
 const RegisterScreen = (props) => {
     const { navigation } = props
+
+    const dispatch = useDispatch()
 
     // ** Refs
     const userNameRef = useRef(null)
@@ -54,11 +58,11 @@ const RegisterScreen = (props) => {
                 showToast("Username should contain atleast 5 characters/digits.")
                 return
             }
-            if (!password.length < 6) {
+            if (password.length < 6) {
                 showToast("Password should contain atleast 6 characters/digits.")
                 return
             }
-            if (!confirmPassword.length < 6) {
+            if (confirmPassword.length < 6) {
                 showToast("Confirm password should contain atleast 6 characters/digits.")
                 return
             }
@@ -70,10 +74,20 @@ const RegisterScreen = (props) => {
                 showToast("Please enter valid phone number.")
                 return
             }
+
+            const userPayload = {
+                userName,
+                email,
+                password,
+                confirmPassword,
+                phoneNumber
+            }
+
+            dispatch(signup(userPayload))
         } catch (err) {
             showToast('Error : ', err.message)
         }
-    }, [])
+    }, [dispatch])
 
     const submitEditingHandler = useCallback((sender) => {
         switch (sender) {

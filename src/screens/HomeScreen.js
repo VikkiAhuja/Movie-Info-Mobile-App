@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
 import debounce from "lodash.debounce";
+import { useSelector } from 'react-redux'
 
 // ** Components
 import BoldText from '../components/BoldText'
@@ -9,24 +10,34 @@ import AppTextInput from '../components/AppTextInput'
 import useMovies from '../hooks/useMovies'
 
 // ** Misc
-import theme from '../theme'
 import images from '../assets/images'
-import Root from '../components/Root'
+import constants from '../constants';
+import theme from '../theme'
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
+    const userData = useSelector(state => state.userData)
+
     const {
         allMovies,
         popularMovies,
         searchResults,
         searchMovies,
         isLoading,
-        isSearching
+        isSearching,
+        setSearchResults
     } = useMovies()
+
+    const showDetails = useCallback((movieId) => {
+        navigation.navigate('details', {
+            movieId
+        })
+    }, [navigation])
 
     const renderPopularMoviesHandler = useCallback(({ item, index }) => {
         try {
             return (
                 <Pressable
+                    onPress={showDetails.bind(null, item.id)}
                     style={{
                         flex: 1,
                         elevation: 2,
@@ -39,7 +50,7 @@ const HomeScreen = () => {
                     }}
                 >
                     <Image
-                        source={{ uri: 'https://image.tmdb.org/t/p/w500/' + item.poster_path }}
+                        source={{ uri: constants.imagePath + item.poster_path }}
                         style={{
                             height: 150,
                             width: 140
@@ -66,12 +77,13 @@ const HomeScreen = () => {
             console.log('Error : ', err.message)
             return null
         }
-    }, [])
+    }, [showDetails])
 
     const renderSearchResultsHandler = useCallback(({ item, index }) => {
         try {
             return (
                 <Pressable
+                    onPress={showDetails.bind(null, item.id)}
                     style={{
                         flex: 1,
                         elevation: 2,
@@ -84,7 +96,7 @@ const HomeScreen = () => {
                     }}
                 >
                     <Image
-                        source={{ uri: 'https://image.tmdb.org/t/p/w500/' + item.poster_path }}
+                        source={{ uri: constants.imagePath + item.poster_path }}
                         style={{
                             height: 200,
                             // width: 120
@@ -112,7 +124,7 @@ const HomeScreen = () => {
             console.log('Error : ', err.message)
             return null
         }
-    }, [])
+    }, [showDetails])
 
     const searchBarRef = useRef()
 
@@ -120,16 +132,20 @@ const HomeScreen = () => {
 
     const onSearchValueChange = useCallback((enteredSearchText) => {
         try {
-            delayedQuery(enteredSearchText)
+            if (enteredSearchText.trim().length) {
+                delayedQuery(enteredSearchText)
+            } else {
+                setTimeout(() => setSearchResults([]))
+            }
         } catch (err) {
             console.log('Error : ', err.message)
         }
-    }, [])
+    }, [setSearchResults])
 
     return (
         <View style={styles.root}>
             <View style={styles.container}>
-                <BoldText style={styles.title}>{"Hello, "}</BoldText>
+                <BoldText style={styles.title}>{`Hello, ${userData?.userName ?? ''}`}</BoldText>
                 <View
                     style={styles.searchbar}
                 >

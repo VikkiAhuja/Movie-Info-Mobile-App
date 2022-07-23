@@ -3,6 +3,7 @@ import { Image } from 'react-native'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux'
 
 import HomeScreen from '../screens/HomeScreen';
 import AuthNavigator from './AuthNavigator';
@@ -12,11 +13,13 @@ import images from '../assets/images';
 import theme from '../theme';
 import BoldText from '../components/BoldText';
 import RegularText from '../components/RegularText';
+import AppNavigator from './AppNavigator';
 
 const Tab = createBottomTabNavigator()
 
 function MainNavigation() {
-    const [isLoggedIn, setLoggedIn] = useState(false)
+    const { userData } = useSelector(state => state)
+
     return (
         <NavigationContainer>
             <Tab.Navigator
@@ -27,8 +30,8 @@ function MainNavigation() {
                 }}
             >
                 <Tab.Screen
-                    name='home'
-                    component={HomeScreen}
+                    name='app'
+                    component={AppNavigator}
                     options={{
                         title: 'Home',
                         tabBarIcon: ({ color, focused, size }) => {
@@ -53,7 +56,7 @@ function MainNavigation() {
                 />
                 <Tab.Screen
                     name='user'
-                    component={!isLoggedIn ? AuthNavigator : ProfileScreen}
+                    component={!userData ? AuthNavigator : ProfileScreen}
                     options={{
                         title: 'User',
                         tabBarIcon: ({ color, focused, size }) => {
